@@ -19,6 +19,10 @@ import java.util.Iterator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Starts the emulator first thing.  Reuses it for each test where 'reset' is called
+ * after each test runs.  After all tests have run the emulator is shutdown.
+ */
 public class PubsubClientTest {
 
     private static final LocalPubSubHelper PUB_SUB_HELPER = LocalPubSubHelper.create();
