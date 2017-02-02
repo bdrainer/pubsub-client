@@ -1,53 +1,73 @@
 # Pubsub
 
-This application demonstrates using the Google Java gRPC PubSub Client Library.  
+This application demonstrates using the Google gRPC PubSub Java Client Library.  
 
+See com.gearlaunch.google.PubsubClientTest
+
+##Overview
 https://cloud.google.com/pubsub/docs/emulator
+
 https://cloud.google.com/pubsub/grpc-overview
 
-Hub is using an older client library.  The Google Java API PubSub Client Library
+Hub is using an older client library.  The Google API PubSub Java Client Library.
 
 https://developers.google.com/api-client-library/java/apis/pubsub/v1
 
 Google recommends using the gRPC library however, it is not supported on Google App Engine.
   
-## Disclaimer
+## Important
 
-Until GAE support the gRPC library, there is no way to use the emulator when running Hub locally.
+Until GAE supports the gRPC library, there doesn't seem to be a way to use the emulator when 
+Hub runs locally.
 
-There is a stackoverflow question to confirm that is true:
- http://stackoverflow.com/questions/41989624/does-google-pubsub-emulator-work-with-the-google-json-pubsub-api
+**Stackoverflow** - 
+http://stackoverflow.com/questions/41989624/does-google-pubsub-emulator-work-with-the-google-json-pubsub-api
   
-Below is described how to install and use the emulator.  
-
 ## Emulator
 
 [Emulators Overview](https://cloud.google.com/sdk/gcloud/reference/beta/emulators)
 
-The PubsubClientTest uses Google's LocalPubSubHelper.  
+Executing either of the commands below will trigger installation of the pubsub
+emulator.  You will be asked if you want to install it.
 
-LocalPubSubHelper downloads a version of the PubSub emulator if your environment does not already have one.  This is just a copy used strictly by the helper.
+`gcloud beta emulators pubsub start` - Starts the pubsub emulator
 
-It makes sense to install the emulator separately from the test so you can run it 
-in its own command window (i.e. standalone)a
-   
-`gcloud beta emulators pubsub env-init`
+`gcloud beta emulators pubsub env-init` - Shows you what environment varialbes to set.
 
-`gcloud beta emulators pubsub start`
+First start the emulator.  The output shows the port it is running on.
 
-If you don't have the emulator installed running the above two command will trigger an install.
+The "env-init" command gives you the command to set the environment variables.  It will be
+ something like `export PUBSUB_EMULATOR_HOST=localhost:8152`
+ 
+Setting this environment variable in the environment an application runs means the application
+will use the gRPC pubsub emulator.  The gRPC library utilizes the PUBSUB_EMULATOR_HOST environment
+variable.
+ 
+ ###Use Case
+Running the emulator when developing locally one could connect both Hub and the logistics-service
+to it.  They will interact just as expected where logistics publishes messages and Hub consumes them.
 
-When the emulator is running standalone you can configure the logistics-service and Hub to run against.  This would allow them to communicate locally through the emulator.  Logistics publishes and Hub consumes.
+### Important
+
+The emulator does not persist messages when it is shutdown.  All unread, unacknowledge messages
+will be lost.
 
 ## PubsubClientTest
 
-The test is a good example of how easy it is to interface with PubSub.  
+The test is a good example of how easy it is to interface with PubSub.
+  
+com.gearlaunch.google.PubsubClientTest->testPubsub()
 
-**Features**
+The test...
 
-* It usses the emulator via LocalPubSubHelper
-* It creates/deletes topics and subscriptions.
-* It publishes a message
-* It pulls messages
-* It pulls the payload off the message
-* It acknowledges messages
+* usses the emulator via LocalPubSubHelper
+* creates/deletes topics and subscriptions.
+* publishes a message
+* pull a message
+* gets the payload off the message
+* acknowledges the message
+
+PubsubClientTest uses Google's LocalPubSubHelper.  The gRPC client lib has test helpers where
+  the API client lib does not have any.
+
+
