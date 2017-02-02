@@ -8,7 +8,9 @@ import com.google.cloud.pubsub.SubscriptionInfo;
 import com.google.cloud.pubsub.Topic;
 import com.google.cloud.pubsub.TopicInfo;
 import com.google.cloud.pubsub.testing.LocalPubSubHelper;
+import org.joda.time.Duration;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,11 +52,11 @@ public class PubsubClientTest {
         PUB_SUB_HELPER.reset();
     }
 
-  /* Does not work, throws exception */
-//  @AfterClass
-//  public static void stopEmulator() throws Exception {
-//    PUB_SUB_HELPER.stop(Duration.standardSeconds(1L ));
-//  }
+    @AfterClass
+    public static void stopEmulator() throws Exception {
+        // 30 seconds is plenty, typicals stops after a second
+        PUB_SUB_HELPER.stop(Duration.standardSeconds(30L));
+    }
 
     // ------------------------------------------------------
 
