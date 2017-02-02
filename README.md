@@ -43,7 +43,7 @@ Setting this environment variable in the environment an application runs means t
 will use the gRPC pubsub emulator.  The gRPC library utilizes the PUBSUB_EMULATOR_HOST environment
 variable.
  
- ###Use Case
+### Use Case
 Running the emulator when developing locally one could connect both Hub and the logistics-service
 to it.  They will interact just as expected where logistics publishes messages and Hub consumes them.
 
